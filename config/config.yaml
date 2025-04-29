@@ -1,0 +1,17 @@
+System:
+  TimeZone: Asia/Bangkok
+
+Log:
+  Level: debug
+  Color: true
+  Json: false
+
+Interface:
+  Http:
+    Host: "127.0.0.1"
+    Port: 3000
+    Name: "Cache Service"
+    Version: "v1.0.0"
+    ReadTimeout: 60
+    WriteTimeout: 60
+    BodyLimit: 10490000
