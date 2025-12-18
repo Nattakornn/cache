@@ -34,17 +34,30 @@ func LoadConfig() IConfig {
 				json:  viper.GetBool("Log.Json"),
 			},
 		},
+		db: &db{
+			host:           viper.GetString("Database.Host"),
+			port:           viper.GetInt("Database.Port"),
+			protocol:       viper.GetString("Database.Protocol"),
+			username:       viper.GetString("Database.Username"),
+			password:       viper.GetString("Database.Password"),
+			database:       viper.GetString("Database.Database"),
+			schema:         viper.GetString("Database.Schema"),
+			sslMode:        viper.GetString("Database.SSLMode"),
+			maxConnections: viper.GetInt("Database.MaxConnection"),
+		},
 	}
 }
 
 type IConfig interface {
 	App() IAppConfig
 	Utils() IUtilsConfig
+	Db() IDbConfig
 }
 
 type config struct {
 	app   *app
 	utils *utils
+	db    *db
 }
 
 // App Config
@@ -117,3 +130,39 @@ func (u *utils) Log() ILogConfig {
 func (l *log) Level() string { return l.level }
 func (l *log) Color() bool   { return l.color }
 func (l *log) Json() bool    { return l.json }
+
+type db struct {
+	host           string
+	port           int
+	protocol       string
+	username       string
+	password       string
+	database       string
+	schema         string
+	sslMode        string
+	maxConnections int
+}
+
+type IDbConfig interface {
+	Url() string
+	MaxOpenConns() int
+}
+
+func (c *config) Db() IDbConfig {
+	return c.db
+}
+
+func (d *db) Url() string {
+	return fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s search_path=%s sslmode=%s",
+		d.host,
+		d.port,
+		d.username,
+		d.password,
+		d.database,
+		d.schema,
+		d.sslMode,
+	)
+}
+
+func (d *db) MaxOpenConns() int { return d.maxConnections }

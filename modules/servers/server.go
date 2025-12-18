@@ -8,6 +8,7 @@ import (
 	"github.com/Nattakornn/cache/config"
 	"github.com/Nattakornn/cache/pkg/logger"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jmoiron/sqlx"
 )
 
 type IServer interface {
@@ -18,9 +19,11 @@ type IServer interface {
 type server struct {
 	app *fiber.App
 	cfg config.IConfig
+	db  *sqlx.DB
 }
 
 func NewServer(cfg config.IConfig,
+	db *sqlx.DB,
 ) IServer {
 	return &server{
 		app: fiber.New(fiber.Config{
@@ -32,6 +35,7 @@ func NewServer(cfg config.IConfig,
 			JSONDecoder:  json.Unmarshal,
 		}),
 		cfg: cfg,
+		db:  db,
 	}
 }
 

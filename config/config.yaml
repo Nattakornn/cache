@@ -15,3 +15,14 @@ Interface:
     ReadTimeout: 60
     WriteTimeout: 60
     BodyLimit: 10490000
+
+Database:
+  Host: "localhost"
+  Port: 5432
+  Protocol: "tcp"
+  Username: "postgres"
+  Password: "123456"
+  Database: "cache"
+  Schema: "cache"
+  SSLMode: "disable"
+  MaxConnection: 50

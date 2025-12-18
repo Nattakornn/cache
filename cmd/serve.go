@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/Nattakornn/cache/config"
 	"github.com/Nattakornn/cache/modules/servers"
+	postgresql "github.com/Nattakornn/cache/pkg/databases/postgressql"
 	"github.com/Nattakornn/cache/pkg/logger"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +18,10 @@ var ComposerCoreCmd = &cobra.Command{
 		logger.InitZapLogger(cfg.Utils().Log())
 		defer logger.SyncLogger()
 
-		servers.NewServer(cfg).Start()
+		dbPostgresql := postgresql.ConnectDb(cfg.Db())
+		defer dbPostgresql.Close()
+
+		servers.NewServer(cfg, dbPostgresql).Start()
 
 		return nil
 	},
