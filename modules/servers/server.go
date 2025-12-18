@@ -45,9 +45,14 @@ func (s *server) GetServer() *server {
 
 func (s *server) Start() {
 
+	// Middlewares
+	m := InitMiddlewares(s)
+	s.app.Use(m.Logger())
+	s.app.Use(m.Cors())
+
 	// Modules
 	baseUrl := s.app.Group("/api/v1")
-	modules := InitModule(baseUrl, s)
+	modules := InitModule(baseUrl, s, m)
 
 	modules.MonitorModule()
 
